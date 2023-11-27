@@ -8,7 +8,7 @@ int main(){
     base_faits = creer_base_vide_BF();
 
     // on charge les valeurs de la base de connaissances et de la base de faits et on les introduits dans les bases vides à l'aide des fonctions nécessaires
-    charger_base_de_connaissances_et_faits("base_de_connaissances.txt", base_connaissances, base_faits);
+    charger_base_de_connaissances_et_faits("Sauvegarde.txt", base_connaissances, base_faits);
 
     //Début du moteur d'inférence
 
