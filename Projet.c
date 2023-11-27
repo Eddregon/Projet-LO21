@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+// Fonctions sur les regles
+
 elem_BC* creer_regle_vide() {
     elem_BC *nouvelle_regle = (elem_BC*)malloc(sizeof(elem_BC));
     if (nouvelle_regle) {
@@ -153,6 +156,9 @@ proposition* acceder_conclusion(elem_BC *regle) {
     return regle->conclusion;
 }
 
+
+
+// Fonctions sur la base de connaissance
 liste_BC* creer_base_vide() {
     liste_BC *base = (liste_BC*)malloc(sizeof(liste_BC));
     if (base) {
@@ -189,6 +195,9 @@ elem_BC* acceder_regle_tete(liste_BC *base) {
 
     return base->BC;
 }
+
+
+
 
 
 void charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits) {
