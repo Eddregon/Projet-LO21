@@ -189,3 +189,6 @@ elem_BC* acceder_regle_tete(liste_BC *base) {
 
     return base->BC;
 }
+
+
+void remplir_BC()

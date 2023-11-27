@@ -14,8 +14,6 @@ typedef struct prop{
     struct prop * prev;
 } proposition;
 
-
-
 // Défininition de la structure d'un element de la base de connaissances (donc une regle).
 // La base de connaissances est une liste chainée d'éléments.
 typedef struct regle{
@@ -25,16 +23,26 @@ typedef struct regle{
 } elem_BC;
 
 
+
 elem_BC* creer_regle_vide();
+
 elem_BC* ajouter_proposition(elem_BC *regle, char *valeur);
+
 elem_BC* creer_conclusion(elem_BC *regle, char *valeur);
+
 int appartient_premisse(elem_BC *regle, char *valeur);
-//Fonction appelée par appartient_premisse
-int appartient_premisse_recursif(proposition *courante, proposition *conclusion, char *valeur);
+    //Fonction appelée par appartient_premisse
+    int appartient_premisse_recursif(proposition *courante, proposition *conclusion, char *valeur);
+
 elem_BC* supprimer_proposition(elem_BC *regle, char *valeur);
+
 int premisse_est_vide(elem_BC *regle);
+
 proposition* premiere_proposition(elem_BC *regle);
+
 proposition* acceder_conclusion(elem_BC *regle);
+
+
 
 
 
@@ -56,8 +64,11 @@ typedef struct {
 } liste_BF;
 
 
+
 liste_BC* creer_base_vide();
+
 void ajouter_regle(liste_BC *base, elem_BC *nouvelle_regle);
+
 elem_BC* acceder_regle_tete(liste_BC *base);
 
 
