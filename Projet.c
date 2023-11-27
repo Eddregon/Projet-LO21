@@ -191,4 +191,47 @@ elem_BC* acceder_regle_tete(liste_BC *base) {
 }
 
 
-void remplir_BC()
+void charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits) {
+    FILE *fichier = fopen(nom_fichier, "r");
+    char ligne[1024];
+    char *token;
+
+    if (fichier == NULL) {
+        printf("Erreur lors de l'ouverture du fichier.\n");
+        return;
+    }
+
+    while (fgets(ligne, sizeof(ligne), fichier)) {
+        // Enlever le saut de ligne à la fin si présent
+        ligne[strcspn(ligne, "\n")] = 0;
+
+        // Vérifier si la ligne contient une règle ou un fait
+        if (strstr(ligne, "=>")) { // C'est une règle
+            elem_BC *nouvelle_regle = creer_regle_vide();
+
+            // Extraire les prémisses
+            token = strtok(ligne, ",");
+            while (token != NULL && strstr(token, "=>") == NULL) {
+                ajouter_proposition(nouvelle_regle, token);
+                token = strtok(NULL, ",");
+            }
+
+            // Extraire la conclusion (après "=>")
+            if (token != NULL) {
+                token = strtok(NULL, "=>");
+                if (token != NULL) {
+                    creer_conclusion(nouvelle_regle, token);
+                }
+            }
+
+            // Ajouter la règle à la base de connaissances
+            ajouter_regle(base_connaissances, nouvelle_regle);
+        } else { // C'est un fait
+            // Ajouter le fait à la base de faits
+            ajouter_fait(base_faits, ligne);
+        }
+    }
+
+    fclose(fichier);
+    printf("Chargement terminé.\n");
+}

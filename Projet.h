@@ -71,6 +71,6 @@ void ajouter_regle(liste_BC *base, elem_BC *nouvelle_regle);
 
 elem_BC* acceder_regle_tete(liste_BC *base);
 
-
+void charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits);
 
 #endif
