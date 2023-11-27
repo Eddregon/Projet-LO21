@@ -40,9 +40,11 @@ int main(){
         }
 
     // On affiche la base de faits (qui affichera donc la base de faits avec les nouveaux faits ajoutés après l'éxecution du moteur d'inference)
-    // a faire
-
-
+    proposition * liste_fait = base_faits->BF;
+    while (liste_fait!=NULL){
+        printf("%s\n", liste_fait->value);
+        liste_fait = liste_fait->next;
+    }
 }
 
 // moteur d'inférence
