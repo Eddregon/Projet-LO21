@@ -67,15 +67,23 @@ typedef struct {
 
 
 
-// Fonctions sur la base de connaissance
+// Fonctions sur la base de connaissance et la base de faits
 liste_BC* creer_base_vide();
 
 void ajouter_regle(liste_BC *base, elem_BC *nouvelle_regle);
 
 elem_BC* acceder_regle_tete(liste_BC *base);
 
-void charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits);
+
+
+// Fonctions complémentaires
 
 liste_BF* creer_base_vide_BF();
+
+void ajouter_proposition_BF(liste_BF *base, proposition *nouvelle_proposition);
+
+void charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits);
+
+
 
 #endif

@@ -25,10 +25,11 @@ int main(){
                 if (appartient_premisse(regle, fait->value)){
                     // on supprime le fait de la premisse de la regle
                     supprimer_proposition(regle, fait->value);
-                    // si la premisse est vide
+                    // si la premisse de la regle est vide
                     if (premisse_est_vide(regle)){
                         // on ajoute la conclusion à la base de faits
-                        ajouter_proposition(base_faits, acceder_conclusion(regle)->value);
+                        ajouter_proposition_BF(base_faits, acceder_conclusion(regle));
+                        // on ajoute un au compteur du nombre d'élements de la base de faits
                     }
                 }
                 // on passe à la regle suivante
@@ -40,6 +41,7 @@ int main(){
         }
 
     // On affiche la base de faits (qui affichera donc la base de faits avec les nouveaux faits ajoutés après l'éxecution du moteur d'inference)
+    printf("on a %d faits:\n", base_faits->nb_elem);
     proposition * liste_fait = base_faits->BF;
     while (liste_fait!=NULL){
         printf("%s\n", liste_fait->value);
