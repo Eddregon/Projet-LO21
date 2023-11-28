@@ -246,14 +246,14 @@ void ajouter_proposition_BF(liste_BF *base, proposition *nouvelle_proposition) {
 
     if (base->BF == NULL) {
         // Si la base est vide, ajoutez cette proposition en tant que premier fait
-        base->BF = nouvelle_proposition
+        base->BF = nouvelle_proposition;
     } else {
         // Sinon, trouvez la fin de la liste et ajoutez la proposition
         proposition *tmp = base->BF;
-        while (tmp->prochain != NULL) {
-            tmp = tmp->prochain;
+        while (tmp->next != NULL) {
+            tmp = tmp->next;
         }
-        tmp->prochain = nouvelle_proposition;
+        tmp->next = nouvelle_proposition;
     }
 
     base->nb_elem++; // Mettre à jour le compteur de faits
