@@ -239,24 +239,29 @@ liste_BF* creer_base_vide_BF() {
 
 
 
-void ajouter_proposition_BF(liste_BF *base, proposition *nouvelle_proposition) {
-    if (base == NULL || nouvelle_proposition == NULL) {
-        return; // Ne rien faire si la base ou la règle est NULL
-    }
+void ajouter_proposition_BF(liste_BF *base, char *valeur) {
 
-    if (base->BF == NULL) {
-        // Si la base est vide, ajoutez cette proposition en tant que premier fait
-        base->BF = nouvelle_proposition;
-    } else {
-        // Sinon, trouvez la fin de la liste et ajoutez la proposition
-        proposition *tmp = base->BF;
-        while (tmp->next != NULL) {
-            tmp = tmp->next;
+    proposition *nouvelle_prop = (proposition*)malloc(sizeof(proposition));
+    nouvelle_prop->value = strdup(valeur);
+    nouvelle_prop->next = NULL; // Pointe directement vers la conclusion existante
+
+    if (base != NULL){
+        if (base->BF == NULL) {
+            // Si la base est vide, la nouvelle proposition devient la première de la liste de faits
+            base->BF = nouvelle_prop;
+            nouvelle_prop->prev = NULL;
+        } else {
+            // Sinon, trouvez la fin de la liste et ajoutez la proposition
+            proposition *tmp = base->BF;
+            while (tmp->next != NULL) {
+                tmp = tmp->next;
+            }
+            nouvelle_prop->prev = tmp;
+            tmp->next = nouvelle_prop;
         }
-        tmp->next = nouvelle_proposition;
-    }
 
-    base->nb_elem++; // Mettre à jour le compteur de faits
+        base->nb_elem++; // Mettre à jour le compteur de faits
+    }
 }
 
 
@@ -299,7 +304,7 @@ void charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *b
             ajouter_regle(base_connaissances, nouvelle_regle);
         } else { // C'est un fait
             // Ajouter le fait à la base de faits
-            ajouter_fait(base_faits, ligne);
+            ajouter_proposition_BF(base_faits, ligne);
         }
     }
 

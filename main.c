@@ -28,11 +28,11 @@ int main(){
                     // si la premisse de la regle est vide
                     if (premisse_est_vide(regle)){
                         // on ajoute la conclusion à la base de faits
-                        ajouter_proposition_BF(base_faits, acceder_conclusion(regle));
+                        ajouter_proposition_BF(base_faits, acceder_conclusion(regle)->value);
                         // on ajoute un au compteur du nombre d'élements de la base de faits
                     }
                 }
-                // on passe à la regle suivante
+                // on passe à la règle suivante
                 regle = regle->prochain;
             }
 
