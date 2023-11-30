@@ -1,5 +1,10 @@
 #include"Projet.h"
 
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+
 int main(){
 
     // On crée une base de connaissance vide
