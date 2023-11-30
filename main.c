@@ -7,14 +7,17 @@
 
 int main(){
 
+    int fichier_charge_avec_succes;
+
     // On crée une base de connaissance vide
     liste_BC* base_connaissances = creer_base_vide();
     // On crée une base de faits vide
     liste_BF* base_faits = creer_base_vide_BF();
 
     // on charge les valeurs de la base de connaissances et de la base de faits et on les introduits dans les bases vides à l'aide des fonctions nécessaires
-    charger_base_de_connaissances_et_faits("Sauvegarde.txt", base_connaissances, base_faits);
+    fichier_charge_avec_succes = charger_base_de_connaissances_et_faits("Sauvegarde.txt", base_connaissances, base_faits);
 
+    if (fichier_charge_avec_succes == 1){
     //Début du moteur d'inférence
 
         // on crée un pointeur sur la première proposition de la base de faits
@@ -45,52 +48,56 @@ int main(){
             fait = fait->next;
         }
 
-    // On affiche la base de faits (qui affichera donc la base de faits avec les nouveaux faits ajoutés après l'éxecution du moteur d'inference)
-    printf("on a %d faits:\n", base_faits->nb_elem);
-    proposition * liste_fait = base_faits->BF;
-    while (liste_fait!=NULL){
-        printf("%s\n", liste_fait->value);
-        liste_fait = liste_fait->next;
+        // On affiche la base de faits (qui affichera donc la base de faits avec les nouveaux faits ajoutés après l'éxecution du moteur d'inference)
+        printf("on a %d faits:\n", base_faits->nb_elem);
+        proposition * liste_fait = base_faits->BF;
+        while (liste_fait!=NULL){
+            printf("%s\n", liste_fait->value);
+            liste_fait = liste_fait->next;
+        }
+
+
+
+    //Libération de la mémoire allouée dynamiquement
+        // Libération de la base de faits
+        proposition *facteur_actuel, *prochain_facteur;
+        facteur_actuel = base_faits->BF;
+        while (facteur_actuel != NULL) {
+            prochain_facteur = facteur_actuel->next;
+            free(facteur_actuel->value); // Si 'value' est alloué dynamiquement
+            free(facteur_actuel);
+            facteur_actuel = prochain_facteur;
+        }
+        free(base_faits);
+
+        // Libération de la base de connaissances
+        elem_BC *regle_actuelle, *prochaine_regle;
+        regle_actuelle = base_connaissances->BC;
+        while (regle_actuelle != NULL) {
+            prochaine_regle = regle_actuelle->prochain;
+
+            // Libération des propositions dans la prémisse
+            proposition *prop_actuelle, *prochaine_prop;
+            prop_actuelle = regle_actuelle->premisse;
+            while (prop_actuelle != NULL && prop_actuelle != regle_actuelle->conclusion) {
+                prochaine_prop = prop_actuelle->next;
+                free(prop_actuelle->value);
+                free(prop_actuelle);
+                prop_actuelle = prochaine_prop;
+            }
+
+            // Libération de la conclusion si elle est différente de NULL
+            if (regle_actuelle->conclusion != NULL) {
+                free(regle_actuelle->conclusion->value);
+                free(regle_actuelle->conclusion);
+            }
+
+            free(regle_actuelle);
+            regle_actuelle = prochaine_regle;
+        }
+        free(base_connaissances);
+        return 0;
     }
-
-// Libération de la base de faits
-proposition *facteur_actuel, *prochain_facteur;
-facteur_actuel = base_faits->BF;
-while (facteur_actuel != NULL) {
-    prochain_facteur = facteur_actuel->next;
-    free(facteur_actuel->value); // Si 'value' est alloué dynamiquement
-    free(facteur_actuel);
-    facteur_actuel = prochain_facteur;
-}
-free(base_faits);
-
-// Libération de la base de connaissances
-elem_BC *regle_actuelle, *prochaine_regle;
-regle_actuelle = base_connaissances->BC;
-while (regle_actuelle != NULL) {
-    prochaine_regle = regle_actuelle->prochain;
-
-    // Libération des propositions dans la prémisse
-    proposition *prop_actuelle, *prochaine_prop;
-    prop_actuelle = regle_actuelle->premisse;
-    while (prop_actuelle != NULL && prop_actuelle != regle_actuelle->conclusion) {
-        prochaine_prop = prop_actuelle->next;
-        free(prop_actuelle->value);
-        free(prop_actuelle);
-        prop_actuelle = prochaine_prop;
-    }
-
-    // Libération de la conclusion si elle est différente de NULL
-    if (regle_actuelle->conclusion != NULL) {
-        free(regle_actuelle->conclusion->value);
-        free(regle_actuelle->conclusion);
-    }
-
-    free(regle_actuelle);
-    regle_actuelle = prochaine_regle;
-}
-free(base_connaissances);
-    return 0;
 }
 
 // moteur d'inférence

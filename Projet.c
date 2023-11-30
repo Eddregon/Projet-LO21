@@ -267,14 +267,14 @@ void ajouter_proposition_BF(liste_BF *base, char *valeur) {
 
 
 
-void charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits) {
+int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits) {
     FILE *fichier = fopen(nom_fichier, "r");
     char ligne[1024];
     char *token;
 
     if (fichier == NULL) {
         printf("Erreur lors de l'ouverture du fichier.\n");
-        return;
+        return 0; //indique que le chargement s'est mal passé
     }
 
     while (fgets(ligne, sizeof(ligne), fichier)) {
@@ -310,4 +310,5 @@ void charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *b
 
     fclose(fichier);
     printf("Chargement terminé.\n");
+    return 1; //indique que le chargement s'est bien passé
 }
