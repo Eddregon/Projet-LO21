@@ -266,9 +266,9 @@ void ajouter_proposition_BF(liste_BF *base, char *valeur) {
 
 
 
-
 int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits) {
     FILE *fichier = fopen(nom_fichier, "r");
+    printf("Chargement du fichier %s...\n", nom_fichier);
     char ligne[1024];
     char *token;
 

@@ -28,6 +28,7 @@ int main(){
         // tant qu'il y a un fait dans la base de faits
         while (fait!=NULL){
             // tant qu'il y a une regle dans la base de connaissances
+            regle= acceder_regle_tete(base_connaissances);
             while (regle!=NULL){
                 // si le fait est dans la premisse de la regle
                 if (appartient_premisse(regle, fait->value)){
@@ -36,8 +37,10 @@ int main(){
                     // si la premisse de la regle est vide
                     if (premisse_est_vide(regle)){
                         // on ajoute la conclusion à la base de faits
-                        ajouter_proposition_BF(base_faits, acceder_conclusion(regle)->value);
-                        // on ajoute un au compteur du nombre d'élements de la base de faits
+                        // on vérifie que la conclusion contient bien une valeur
+                        if (acceder_conclusion(regle)->value!=NULL){
+                            ajouter_proposition_BF(base_faits, acceder_conclusion(regle)->value);
+                        }
                     }
                 }
                 // on passe à la règle suivante
