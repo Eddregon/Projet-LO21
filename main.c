@@ -40,6 +40,7 @@ int main(){
                         // on vérifie que la conclusion contient bien une valeur
                         if (acceder_conclusion(regle)->value!=NULL){
                             ajouter_proposition_BF(base_faits, acceder_conclusion(regle)->value);
+                            supprimer_regle_vide(base_connaissances);
                         }
                     }
                 }
