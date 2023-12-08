@@ -82,6 +82,8 @@ liste_BF* creer_base_vide_BF();
 
 void ajouter_proposition_BF(liste_BF *base, char *valeur);
 
+liste_BC * supprimer_regle_vide(liste_BC *base);
+
 int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits);
 
 

@@ -266,9 +266,57 @@ void ajouter_proposition_BF(liste_BF *base, char *valeur) {
 
 
 
+liste_BC * supprimer_regle_vide(liste_BC *base) {
+
+    if (base == NULL || base->BC == NULL) {
+        return base; // Rien à faire si la base est vide
+    }
+
+    elem_BC *regle = base->BC;
+    if(premisse_est_vide(regle)){
+        // Supprimer la première règle de la base
+        base->BC = base->BC->prochain;
+        // on libère la memoire
+        if (regle->conclusion != NULL) {
+            free(regle->conclusion->value);
+            free(regle->conclusion);
+        }
+        free(regle);
+        // on decremente le compteur du nombre de regles
+        base->nb_elem--;
+    }
+    else {
+        while (regle != NULL) {
+            if (premisse_est_vide(regle->prochain)) {
+                // Supprimer la règle de la base
+                if (regle->prochain->prochain != NULL){
+                    regle->prochain = regle->prochain->prochain;
+                }
+
+                // on libère la memoire
+                if (regle->conclusion != NULL) {
+                    free(regle->conclusion->value);
+                    free(regle->conclusion);
+                }
+                free(regle);
+                // on decremente le compteur du nombre de regles
+                base->nb_elem--;
+            } else {
+                // Passer à la règle suivante
+                regle = regle->prochain;
+            }
+        }
+
+    }
+
+    return base;
+}
+
+
 
 int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits) {
     FILE *fichier = fopen(nom_fichier, "r");
+    printf("Chargement du fichier %s...\n", nom_fichier);
     char ligne[1024];
     char *token;
 
