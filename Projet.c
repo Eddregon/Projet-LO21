@@ -309,6 +309,6 @@ int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *ba
     }
 
     fclose(fichier);
-    printf("Chargement terminé.\n");
+    printf("Chargement termine.\n");
     return 1; //indique que le chargement s'est bien passé
 }

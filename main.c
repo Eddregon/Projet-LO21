@@ -1,4 +1,4 @@
-#include"Projet.h"
+#include"Projet.c"
 
 #include <string.h>
 #include <stdio.h>
@@ -46,6 +46,7 @@ int main(){
 
             // On regarde si il y a un prochain fait dans la base de faits sinon on retourne null et on arrete le moteur d'inference
             fait = fait->next;
+            regle = acceder_regle_tete(base_connaissances);
         }
 
         // On affiche la base de faits (qui affichera donc la base de faits avec les nouveaux faits ajoutés après l'éxecution du moteur d'inference)
