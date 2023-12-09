@@ -7,7 +7,6 @@
 
 int main(){
 
-     int i=1,j=1;
     int fichier_charge_avec_succes;
 
     // On crée une base de connaissance vide
@@ -39,32 +38,28 @@ int main(){
                     if (premisse_est_vide(regle)){
                         // on ajoute la conclusion à la base de faits
                         // on vérifie que la conclusion contient bien une valeur
-                        if (acceder_conclusion(regle)!=NULL){
+                        if (acceder_conclusion(regle)->value!=NULL){
                             ajouter_proposition_BF(base_faits, acceder_conclusion(regle)->value);
                             supprimer_regle_vide(base_connaissances);
                         }
                     }
                 }
-                printf("Fait numero : %d, Regle numero : %d\n", i,j);
                 // on passe à la règle suivante
                 regle = regle->prochain;
-                j++;
             }
 
             // On regarde si il y a un prochain fait dans la base de faits sinon on retourne null et on arrete le moteur d'inference
             fait = fait->next;
-            i++;
             regle = acceder_regle_tete(base_connaissances);
         }
 
         // On affiche la base de faits (qui affichera donc la base de faits avec les nouveaux faits ajoutés après l'éxecution du moteur d'inference)
-        printf("on a %d faits et %d regles:\n", base_faits->nb_elem,base_connaissances->nb_elem);
+        printf("on a %d faits:\n", base_faits->nb_elem);
         proposition * liste_fait = base_faits->BF;
         while (liste_fait!=NULL){
             printf("%s\n", liste_fait->value);
             liste_fait = liste_fait->next;
         }
-
 
 
 
