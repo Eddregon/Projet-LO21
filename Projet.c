@@ -149,11 +149,15 @@ elem_BC* supprimer_proposition(elem_BC *regle, char *valeur) {
 
 int premisse_est_vide(elem_BC *regle) {
     if (regle == NULL) {
-        return 1; // Considérer la prémisse comme vide si la règle elle-même est NULL
+        // Si la règle est NULL, la prémisse est considérée comme vide.
+        return 1;
     }
 
-    return (regle->premisse == NULL);
+    // Vérifie si la prémisse pointe directement sur la conclusion.
+    // Si c'est le cas, cela signifie que la prémisse est vide.
+    return (regle->premisse == regle->conclusion);
 }
+
 
 
 
@@ -168,7 +172,7 @@ proposition* premiere_proposition(elem_BC *regle) {
 
 
 proposition* acceder_conclusion(elem_BC *regle) {
-    if (regle == NULL) {
+    if (regle == NULL || regle->conclusion == NULL) {
         return NULL; // Retourner NULL si la règle est NULL
     }
 
