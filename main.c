@@ -18,6 +18,15 @@ int main(){
     // on charge les valeurs de la base de connaissances et de la base de faits et on les introduits dans les bases vides à l'aide des fonctions nécessaires
     fichier_charge_avec_succes = charger_base_de_connaissances_et_faits("Sauvegarde.txt", base_connaissances, base_faits);
 
+
+        // // On affiche la base de faits (qui affichera donc la base de faits avec les nouveaux faits ajoutés après l'éxecution du moteur d'inference)
+        // printf("on a %d faits et %d regles:\n", base_faits->nb_elem,base_connaissances->nb_elem);
+        // proposition * liste_fait = base_faits->BF;
+        // while (liste_fait!=NULL){
+        //     printf("%s\n", liste_fait->value);
+        //     liste_fait = liste_fait->next;
+        // }
+
     if (fichier_charge_avec_succes == 1){
     //Début du moteur d'inférence
 
@@ -34,14 +43,14 @@ int main(){
                 // si le fait est dans la premisse de la regle
                 if (appartient_premisse(regle, fait->value)){
                     // on supprime le fait de la premisse de la regle
-                    supprimer_proposition(regle, fait->value);
+                    regle = supprimer_proposition(regle, fait->value);
                     // si la premisse de la regle est vide
                     if (premisse_est_vide(regle)){
                         // on ajoute la conclusion à la base de faits
                         // on vérifie que la conclusion contient bien une valeur
                         if (acceder_conclusion(regle)!=NULL){
                             ajouter_proposition_BF(base_faits, acceder_conclusion(regle)->value);
-                            supprimer_regle_vide(base_connaissances);
+                            base_connaissances = supprimer_regle_vide(base_connaissances);
                         }
                     }
                 }

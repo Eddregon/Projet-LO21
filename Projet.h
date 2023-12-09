@@ -70,7 +70,8 @@ typedef struct {
 // Fonctions sur la base de connaissance et la base de faits
 liste_BC* creer_base_vide();
 
-void ajouter_regle(liste_BC *base, elem_BC *nouvelle_regle);
+
+liste_BC* ajouter_regle(liste_BC *base, elem_BC *nouvelle_regle);
 
 elem_BC* acceder_regle_tete(liste_BC *base);
 

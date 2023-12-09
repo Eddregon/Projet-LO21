@@ -83,7 +83,7 @@ elem_BC* creer_conclusion(elem_BC *regle, char *valeur) {
 }
 
 
-
+// Version 1 en deux fonctions séparées.
 int appartient_premisse_recursif(proposition *courante, proposition *conclusion, char *valeur) {
     // Vérifier si on est arrivé à la fin de la prémisse ou à la conclusion
     if (courante == NULL || courante == conclusion) {
@@ -99,8 +99,6 @@ int appartient_premisse_recursif(proposition *courante, proposition *conclusion,
     return appartient_premisse_recursif(courante->next, conclusion, valeur);
 }
 
-
-
 int appartient_premisse(elem_BC *regle, char *valeur) {
     // Vérifier si la règle ou la valeur est NULL
     if (regle == NULL || valeur == NULL) {
@@ -110,6 +108,33 @@ int appartient_premisse(elem_BC *regle, char *valeur) {
     // Appel initial de la fonction récursive
     return appartient_premisse_recursif(regle->premisse, regle->conclusion, valeur);
 }
+
+// Version 2 en une seule fonction. Probleme saturation memoire ??
+// int appartient_premisse(elem_BC *regle, char *valeur) {
+//     // Vérifier si la règle, la valeur ou la prémisse est NULL
+//     if (regle == NULL || valeur == NULL || regle->premisse == NULL) {
+//         return 0;
+//     }
+
+//     // Vérifier si on a atteint la conclusion
+//     if (regle->premisse == regle->conclusion) {
+//         return 0;
+//     }
+
+//     // Vérifier si la valeur courante correspond
+//     if (strcmp(regle->premisse->value, valeur) == 0) {
+//         return 1;
+//     }
+
+//     // Créer un nouveau pointeur pour l'appel récursif, avec la prémisse mise à jour
+//     elem_BC regle_suivante;
+//     regle_suivante.premisse = regle->premisse->next;
+//     regle_suivante.conclusion = regle->conclusion;
+//     regle_suivante.prochain = regle->prochain;
+
+//     // Appel récursif avec la règle mise à jour
+//     return appartient_premisse(&regle_suivante, valeur);
+// }
 
 
 
@@ -196,16 +221,19 @@ liste_BC* creer_base_vide() {
 
 
 
-void ajouter_regle(liste_BC *base, elem_BC *nouvelle_regle) {
-    if (base == NULL || nouvelle_regle == NULL) {
-        return; // Ne rien faire si la base ou la règle est NULL
+liste_BC* ajouter_regle(liste_BC *base, elem_BC *nouvelle_regle) {
+    if (base == NULL) {
+        return NULL; // Renvoie NULL si la base est NULL
     }
 
+    if (nouvelle_regle == NULL) {
+        return base; // Renvoie la base telle qu'elle est si la nouvelle règle est NULL
+    }
+
+    // Ajouter la nouvelle règle
     if (base->BC == NULL) {
-        // Si la base est vide, ajoutez cette règle en tant que première règle
         base->BC = nouvelle_regle;
     } else {
-        // Sinon, trouvez la fin de la liste et ajoutez la règle
         elem_BC *tmp = base->BC;
         while (tmp->prochain != NULL) {
             tmp = tmp->prochain;
@@ -213,8 +241,11 @@ void ajouter_regle(liste_BC *base, elem_BC *nouvelle_regle) {
         tmp->prochain = nouvelle_regle;
     }
 
-    base->nb_elem++; // Mettre à jour le compteur de règles
+    base->nb_elem++;
+    return base;
 }
+
+
 
 
 
@@ -267,6 +298,8 @@ void ajouter_proposition_BF(liste_BF *base, char *valeur) {
         base->nb_elem++; // Mettre à jour le compteur de faits
     }
 }
+
+
 
 
 
@@ -340,7 +373,7 @@ int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *ba
             // Extraire les prémisses
             token = strtok(ligne, ",");
             while (token != NULL && strstr(token, "=>") == NULL) {
-                ajouter_proposition(nouvelle_regle, token);
+                nouvelle_regle = ajouter_proposition(nouvelle_regle, token);
                 token = strtok(NULL, ",");
             }
 
@@ -348,12 +381,12 @@ int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *ba
             if (token != NULL) {
                 token = strtok(NULL, "=>");
                 if (token != NULL) {
-                    creer_conclusion(nouvelle_regle, token);
+                    nouvelle_regle = creer_conclusion(nouvelle_regle, token);
                 }
             }
 
             // Ajouter la règle à la base de connaissances
-            ajouter_regle(base_connaissances, nouvelle_regle);
+            base_connaissances = ajouter_regle(base_connaissances, nouvelle_regle);
         } else { // C'est un fait
             // Ajouter le fait à la base de faits
             ajouter_proposition_BF(base_faits, ligne);
