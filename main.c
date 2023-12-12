@@ -59,6 +59,29 @@ int main(){
                 regle = regle->prochain;
                 j++;
             }
+                        // On affiche la base de connaissances (les règles)
+    printf("Liste des regles:\n");
+    elem_BC *liste_regle = base_connaissances->BC;
+    while (liste_regle != NULL) {
+        proposition *courante = liste_regle->premisse;
+        while (courante != NULL && courante != liste_regle->conclusion) {
+            printf("%s, ", courante->value);
+            courante = courante->next;
+        }
+        if (liste_regle->conclusion != NULL) {
+            printf("=> %s\n", liste_regle->conclusion->value);
+        } else {
+            printf("=> NULL\n");
+        }
+        liste_regle = liste_regle->prochain;
+    }
+
+
+
+
+
+
+
 
             // On regarde si il y a un prochain fait dans la base de faits sinon on retourne null et on arrete le moteur d'inference
             fait = fait->next;
@@ -74,7 +97,22 @@ int main(){
             liste_fait = liste_fait->next;
         }
 
-
+    //         // On affiche la base de connaissances (les règles)
+    // printf("Liste des regles:\n");
+    // elem_BC *liste_regle = base_connaissances->BC;
+    // while (liste_regle != NULL) {
+    //     proposition *courante = liste_regle->premisse;
+    //     while (courante != NULL && courante != liste_regle->conclusion) {
+    //         printf("%s, ", courante->value);
+    //         courante = courante->next;
+    //     }
+    //     if (liste_regle->conclusion != NULL) {
+    //         printf("=> %s\n", liste_regle->conclusion->value);
+    //     } else {
+    //         printf("=> NULL\n");
+    //     }
+    //     liste_regle = liste_regle->prochain;
+    // }
 
 
     //Libération de la mémoire allouée dynamiquement
