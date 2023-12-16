@@ -363,27 +363,27 @@ int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *ba
     }
 
     while (fgets(ligne, sizeof(ligne), fichier)) {
-        // Enlever le saut de ligne à la fin si présent
-        ligne[strcspn(ligne, "\n")] = 0;
+         // Enlever le saut de ligne à la fin si présent
+    ligne[strcspn(ligne, "\n")] = 0;
 
-        // Vérifier si la ligne contient une règle ou un fait
-        if (strstr(ligne, "=>")) { // C'est une règle
-            elem_BC *nouvelle_regle = creer_regle_vide();
+    // Vérifier si la ligne contient une règle ou un fait
+    if (strstr(ligne, "=>")) { // C'est une règle
+        elem_BC *nouvelle_regle = creer_regle_vide();
 
-            // Extraire les prémisses
-            token = strtok(ligne, ",");
-            while (token != NULL && strstr(token, "=>") == NULL) {
-                nouvelle_regle = ajouter_proposition(nouvelle_regle, token);
-                token = strtok(NULL, ",");
-            }
+        // Extraire les prémisses
+        token = strtok(ligne, " ,"); // Séparer par des espaces et des virgules
+        while (token != NULL && strstr(token, "=>") == NULL) {
+            nouvelle_regle = ajouter_proposition(nouvelle_regle, token);
+            token = strtok(NULL, " ,");
+        }
 
-            // Extraire la conclusion (après "=>")
+        // Sauter le "=>" et extraire la conclusion
+        if (token != NULL && strstr(token, "=>") != NULL) {
+            token = strtok(NULL, " ,"); // Passez à la conclusion
             if (token != NULL) {
-                token = strtok(NULL, "=>");
-                if (token != NULL) {
-                    nouvelle_regle = creer_conclusion(nouvelle_regle, token);
-                }
+                nouvelle_regle = creer_conclusion(nouvelle_regle, token);
             }
+        }
 
             // Ajouter la règle à la base de connaissances
             base_connaissances = ajouter_regle(base_connaissances, nouvelle_regle);

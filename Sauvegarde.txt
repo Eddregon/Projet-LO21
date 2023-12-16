@@ -1,15 +1,4 @@
-A, B => C
-D, C => F
-G, F => I
-I, K, L => M
-N, O => P
-Q, R => S
-T, U, V => W
-X, Y => Z
-D
-G
-J
-N
-Q
-T
-X
+A, B, => C
+C, A, => D
+A
+B
