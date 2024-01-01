@@ -21,8 +21,6 @@ elem_BC* creer_regle_vide() {
     return nouvelle_regle;
 }
 
-
-
 elem_BC* ajouter_proposition(elem_BC *regle, char *valeur) {
     proposition *nouvelle_prop = (proposition*)malloc(sizeof(proposition));
     nouvelle_prop->value = strdup(valeur);
@@ -50,8 +48,6 @@ elem_BC* ajouter_proposition(elem_BC *regle, char *valeur) {
     }
     return regle;
 }
-
-
 
 elem_BC* creer_conclusion(elem_BC *regle, char *valeur) {
     // Si une conclusion existe déjà, remplacez simplement sa valeur.
@@ -83,7 +79,6 @@ elem_BC* creer_conclusion(elem_BC *regle, char *valeur) {
 }
 
 
-// Version 1 en deux fonctions séparées.
 int appartient_premisse_recursif(proposition *courante, proposition *conclusion, char *valeur) {
     // Vérifier si on est arrivé à la fin de la prémisse ou à la conclusion
     if (courante == NULL || courante == conclusion) {
@@ -98,7 +93,6 @@ int appartient_premisse_recursif(proposition *courante, proposition *conclusion,
     // Appel récursif avec la proposition suivante
     return appartient_premisse_recursif(courante->next, conclusion, valeur);
 }
-
 int appartient_premisse(elem_BC *regle, char *valeur) {
     // Vérifier si la règle ou la valeur est NULL
     if (regle == NULL || valeur == NULL) {
@@ -108,35 +102,6 @@ int appartient_premisse(elem_BC *regle, char *valeur) {
     // Appel initial de la fonction récursive
     return appartient_premisse_recursif(regle->premisse, regle->conclusion, valeur);
 }
-
-// Version 2 en une seule fonction. Probleme saturation memoire ??
-// int appartient_premisse(elem_BC *regle, char *valeur) {
-//     // Vérifier si la règle, la valeur ou la prémisse est NULL
-//     if (regle == NULL || valeur == NULL || regle->premisse == NULL) {
-//         return 0;
-//     }
-
-//     // Vérifier si on a atteint la conclusion
-//     if (regle->premisse == regle->conclusion) {
-//         return 0;
-//     }
-
-//     // Vérifier si la valeur courante correspond
-//     if (strcmp(regle->premisse->value, valeur) == 0) {
-//         return 1;
-//     }
-
-//     // Créer un nouveau pointeur pour l'appel récursif, avec la prémisse mise à jour
-//     elem_BC regle_suivante;
-//     regle_suivante.premisse = regle->premisse->next;
-//     regle_suivante.conclusion = regle->conclusion;
-//     regle_suivante.prochain = regle->prochain;
-
-//     // Appel récursif avec la règle mise à jour
-//     return appartient_premisse(&regle_suivante, valeur);
-// }
-
-
 
 elem_BC* supprimer_proposition(elem_BC *regle, char *valeur) {
     if (regle == NULL || valeur == NULL || regle->premisse == NULL) {
@@ -170,8 +135,6 @@ elem_BC* supprimer_proposition(elem_BC *regle, char *valeur) {
     return regle;
 }
 
-
-
 int premisse_est_vide(elem_BC *regle) {
     if (regle == NULL) {
         // Si la règle est NULL, la prémisse est considérée comme vide.
@@ -183,9 +146,6 @@ int premisse_est_vide(elem_BC *regle) {
     return (regle->premisse == regle->conclusion);
 }
 
-
-
-
 proposition* premiere_proposition(elem_BC *regle) {
     if (regle == NULL || regle->premisse == NULL) {
         return NULL; // Retourner NULL si la règle est NULL ou si la prémisse est vide
@@ -193,8 +153,6 @@ proposition* premiere_proposition(elem_BC *regle) {
 
     return regle->premisse;
 }
-
-
 
 proposition* acceder_conclusion(elem_BC *regle) {
     if (regle == NULL || regle->conclusion == NULL) {
@@ -218,8 +176,6 @@ liste_BC* creer_base_vide() {
     }
     return base;
 }
-
-
 
 liste_BC* ajouter_regle(liste_BC *base, elem_BC *nouvelle_regle) {
     if (base == NULL) {
@@ -245,10 +201,6 @@ liste_BC* ajouter_regle(liste_BC *base, elem_BC *nouvelle_regle) {
     return base;
 }
 
-
-
-
-
 elem_BC* acceder_regle_tete(liste_BC *base) {
     if (base == NULL || base->BC == NULL) {
         return NULL; // Retourner NULL si la base est NULL ou vide
@@ -256,52 +208,6 @@ elem_BC* acceder_regle_tete(liste_BC *base) {
 
     return base->BC;
 }
-
-
-
-
-
-// Fonctions complémentaires
-
-liste_BF* creer_base_vide_BF() {
-    liste_BF *base = (liste_BF*)malloc(sizeof(liste_BF));
-    if (base) {
-        base->BF = NULL;
-        base->nb_elem = 0;
-    }
-    return base;
-}
-
-
-
-void ajouter_proposition_BF(liste_BF *base, char *valeur) {
-
-    proposition *nouvelle_prop = (proposition*)malloc(sizeof(proposition));
-    nouvelle_prop->value = strdup(valeur);
-    nouvelle_prop->next = NULL; // Pointe directement vers la conclusion existante
-
-    if (base != NULL){
-        if (base->BF == NULL) {
-            // Si la base est vide, la nouvelle proposition devient la première de la liste de faits
-            base->BF = nouvelle_prop;
-            nouvelle_prop->prev = NULL;
-        } else {
-            // Sinon, trouvez la fin de la liste et ajoutez la proposition
-            proposition *tmp = base->BF;
-            while (tmp->next != NULL) {
-                tmp = tmp->next;
-            }
-            nouvelle_prop->prev = tmp;
-            tmp->next = nouvelle_prop;
-        }
-
-        base->nb_elem++; // Mettre à jour le compteur de faits
-    }
-}
-
-
-
-
 
 liste_BC * supprimer_regle_vide(liste_BC *base) {
 
@@ -351,6 +257,45 @@ liste_BC * supprimer_regle_vide(liste_BC *base) {
 
 
 
+
+// Fonctions Base de faits
+
+liste_BF* creer_base_vide_BF() {
+    liste_BF *base = (liste_BF*)malloc(sizeof(liste_BF));
+    if (base) {
+        base->BF = NULL;
+        base->nb_elem = 0;
+    }
+    return base;
+}
+
+void ajouter_proposition_BF(liste_BF *base, char *valeur) {
+
+    proposition *nouvelle_prop = (proposition*)malloc(sizeof(proposition));
+    nouvelle_prop->value = strdup(valeur);
+    nouvelle_prop->next = NULL; // Pointe directement vers la conclusion existante
+
+    if (base != NULL){
+        if (base->BF == NULL) {
+            // Si la base est vide, la nouvelle proposition devient la première de la liste de faits
+            base->BF = nouvelle_prop;
+            nouvelle_prop->prev = NULL;
+        } else {
+            // Sinon, trouvez la fin de la liste et ajoutez la proposition
+            proposition *tmp = base->BF;
+            while (tmp->next != NULL) {
+                tmp = tmp->next;
+            }
+            nouvelle_prop->prev = tmp;
+            tmp->next = nouvelle_prop;
+        }
+
+        base->nb_elem++; // Mettre à jour le compteur de faits
+    }
+}
+
+
+//Fonction fichier
 int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits) {
     FILE *fichier = fopen(nom_fichier, "r");
     printf("Chargement du fichier %s...\n", nom_fichier);
