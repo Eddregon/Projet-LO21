@@ -210,50 +210,42 @@ elem_BC* acceder_regle_tete(liste_BC *base) {
 }
 
 liste_BC * supprimer_regle_vide(liste_BC *base) {
-
     if (base == NULL || base->BC == NULL) {
         return base; // Rien à faire si la base est vide
     }
 
-    elem_BC *regle = base->BC;
-    if(premisse_est_vide(regle)){
-        // Supprimer la première règle de la base
-        base->BC = base->BC->prochain;
-        // on libère la memoire
-        if (regle->conclusion != NULL) {
-            free(regle->conclusion->value);
-            free(regle->conclusion);
-        }
-        free(regle);
-        // on decremente le compteur du nombre de regles
-        base->nb_elem--;
-    }
-    else {
-        while (regle != NULL) {
-            if (premisse_est_vide(regle->prochain)) {
-                // Supprimer la règle de la base
-                if (regle->prochain->prochain != NULL){
-                    regle->prochain = regle->prochain->prochain;
-                }
+    elem_BC *regle_actuelle = base->BC;
+    elem_BC *regle_precedente = NULL;
 
-                // on libère la memoire
-                if (regle->conclusion != NULL) {
-                    free(regle->conclusion->value);
-                    free(regle->conclusion);
-                }
-                free(regle);
-                // on decremente le compteur du nombre de regles
-                base->nb_elem--;
+    while (regle_actuelle != NULL) {
+        if (premisse_est_vide(regle_actuelle)) {
+            // Si c'est la première règle
+            if (regle_precedente == NULL) {
+                base->BC = regle_actuelle->prochain;
             } else {
-                // Passer à la règle suivante
-                regle = regle->prochain;
+                regle_precedente->prochain = regle_actuelle->prochain;
             }
-        }
 
+            // Libérer la mémoire de la règle actuelle
+            if (regle_actuelle->conclusion != NULL) {
+                free(regle_actuelle->conclusion->value);
+                free(regle_actuelle->conclusion);
+            }
+            elem_BC *regle_a_supprimer = regle_actuelle;
+            regle_actuelle = regle_actuelle->prochain; // Avant de libérer la mémoire
+            free(regle_a_supprimer);
+
+            base->nb_elem--;
+        } else {
+            // Passer à la règle suivante
+            regle_precedente = regle_actuelle;
+            regle_actuelle = regle_actuelle->prochain;
+        }
     }
 
     return base;
 }
+
 
 
 
@@ -341,4 +333,39 @@ int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *ba
     fclose(fichier);
     printf("Chargement termine.\n");
     return 1; //indique que le chargement s'est bien passé
+}
+
+void afficherBCBF(liste_BF* base_faits, liste_BC* base_connaissances){
+
+     // On affiche la base de faits (qui affichera donc la base de faits avec les nouveaux faits ajoutés après l'éxecution du moteur d'inference)
+    printf("\n\non a %d faits et %d regles:\n", base_faits->nb_elem, base_connaissances->nb_elem);
+    proposition *liste_fait = base_faits->BF;
+    while (liste_fait != NULL)
+    {
+        printf("%s\n", liste_fait->value);
+        liste_fait = liste_fait->next;
+    }
+
+    // On affiche la base de connaissances (les règles)
+    printf("Liste des regles:\n");
+    elem_BC *liste_regle = base_connaissances->BC;
+    while (liste_regle != NULL)
+    {
+        proposition *courante = liste_regle->premisse;
+        while (courante != NULL && courante != liste_regle->conclusion)
+        {
+            printf("%s, ", courante->value);
+            courante = courante->next;
+        }
+        if (liste_regle->conclusion != NULL)
+        {
+            printf("=> %s\n", liste_regle->conclusion->value);
+        }
+        else
+        {
+            printf("=> NULL\n");
+        }
+        liste_regle = liste_regle->prochain;
+    }
+
 }

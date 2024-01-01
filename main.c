@@ -7,7 +7,7 @@
 int main()
 {
 
-    int fichier_charge_avec_succes;
+    int fichier_charge_avec_succes=0;
 
     // On crée une base de connaissance vide
     liste_BC *base_connaissances = creer_base_vide();
@@ -32,10 +32,11 @@ int main()
         proposition *fait = base_faits->BF;
         // on crée un pointeur sur la première regle de la base de connaissances
         elem_BC *regle = acceder_regle_tete(base_connaissances);
-
+        
         // tant qu'il y a un fait dans la base de faits
         while (fait != NULL)
         {
+            printf("On regarde pour le fait %s\n", fait->value);
             // tant qu'il y a une regle dans la base de connaissances
             regle = acceder_regle_tete(base_connaissances);
             while (regle != NULL)
@@ -45,13 +46,14 @@ int main()
                 {
                     // on supprime le fait de la premisse de la regle
                     regle = supprimer_proposition(regle, fait->value);
+
                     // si la premisse de la regle est vide
                     if (premisse_est_vide(regle))
                     {
                         // on ajoute la conclusion à la base de faits
                         // on vérifie que la conclusion contient bien une valeur
                         if (acceder_conclusion(regle) != NULL)
-                        {
+                        {                           
                             ajouter_proposition_BF(base_faits, acceder_conclusion(regle)->value);
                             base_connaissances = supprimer_regle_vide(base_connaissances);
                         }
@@ -66,36 +68,8 @@ int main()
         }
     }
 
-    // On affiche la base de faits (qui affichera donc la base de faits avec les nouveaux faits ajoutés après l'éxecution du moteur d'inference)
-    printf("on a %d faits et %d regles:\n", base_faits->nb_elem, base_connaissances->nb_elem);
-    proposition *liste_fait = base_faits->BF;
-    while (liste_fait != NULL)
-    {
-        printf("%s\n", liste_fait->value);
-        liste_fait = liste_fait->next;
-    }
+   afficherBCBF(base_faits,base_connaissances);
 
-    // On affiche la base de connaissances (les règles)
-    printf("Liste des regles:\n");
-    elem_BC *liste_regle = base_connaissances->BC;
-    while (liste_regle != NULL)
-    {
-        proposition *courante = liste_regle->premisse;
-        while (courante != NULL && courante != liste_regle->conclusion)
-        {
-            printf("%s, ", courante->value);
-            courante = courante->next;
-        }
-        if (liste_regle->conclusion != NULL)
-        {
-            printf("=> %s\n", liste_regle->conclusion->value);
-        }
-        else
-        {
-            printf("=> NULL\n");
-        }
-        liste_regle = liste_regle->prochain;
-    }
 
     // Libération de la mémoire allouée dynamiquement
     //  Libération de la base de faits
