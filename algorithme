@@ -1,0 +1,392 @@
+FONCTIONS_UTILISEES
+    Fonction creer_regle_vide()->elem_BC
+    Debut_fonction
+        nouvelle_regle<-creer()
+        si nonvide(nouvelle_regle) alors
+            premisse(nouvelle_regle)<-null
+            conclusion(nouvelle_regle)<-null
+            prochain(nouvelle_regle)<-null
+        fin si
+        creer_regle_vide<-nouvelle_regle
+    Fin_fonction
+
+
+
+    Fonction ajouter_proposition(regle:elem_BC, valeur:caractere)->elem_BC
+    Debut_fonction
+        nouvelle_prop<-creer()
+        value(nouvelle_prop)<-???(valeur) //nouvelle_prop->value = strdup(valeur);
+        next(nouvelle_prop)<-conclusion(regle)
+
+        si vide(premisse(regle)) alors
+            premisse(regle)<-nouvelle_prop
+            prev(nouvelle_prop)<-null
+        sinon
+            si nonvide(conclusion(regle)) et nonvide(prev(conclusion(regle))) alors
+                next(prev(conclusion(regle)))<-nouvelle_prop;
+                prev(nouvelle_prop)<-prev(conclusion(regle));
+                prev(conclusion(regle))<-nouvelle_prop;
+            sinon
+                derniere: proposition<-premisse(regle)
+                tant que nonvide(next(derniere)) faire
+                    derniere<-next(derniere)
+                fin tant que
+                next(derniere)<-nouvelle_prop
+                prev(nouvelle_prop)<-derniere
+            fin si
+        fin si
+        ajouter_proposition<-regle
+    Fin_fonction
+
+
+
+    Fonction creer_conclusion(regle:elem_BC, valeur:caractere)->elem_BC
+    Debut_fonction
+        si nonvide(conclusion(regle)) alors
+            value(conclusion(regle))<-???(valeur) // regle->conclusion->value = strdup(valeur);
+        sinon
+            concl:proposition<-creer()
+            value(concl)<-???(valeur) //concl->value = strdup(valeur);
+            next(concl)<-null
+            prev(concl)<-null
+
+            si nonvide(premisse(regle)) alors
+                tmp:proposition<-premisse(regle)
+                tant que nonvide(next(tmp)) faire
+                    tmp<-next(tmp)
+                fin tant que
+                next(tmp)<-concl
+                prev(concl)<-tmp
+            fin si
+
+            conclusion(regle)<-concl
+        fin si
+
+        creer_conclusion<-regle
+    Fin_fonction
+
+
+
+    Fonction appartient_premisse_recursif(courante:proposition, conclusion:proposition, caleur:caractere)->booleen
+    Debut_fonction
+        si nonvide(courante) ou courante = conclusion alors
+            appartient_premisse_recursif<-0
+        fin si
+
+        si (???) alors //if (strcmp(courante->value, valeur) == 0) {
+            appartient_premisse_recursif<-1
+        fin si
+
+        appartient_premisse_recursif<-appartient_premisse_recursif(next(courante), conclusion, valeur)
+    Fin_fonction
+
+
+
+    Fonction appartient_premisse(regle:elem_BC, valeur:caractere)->booleen
+    Debut_fonction
+        si vide(regle) ou vide(valeur)
+            appartient_premisse<-0
+        fin si
+
+        appartient_premisse<-appartient_premisse_recursif(premisse(regle), conclusion(regle), valeur)
+    Fin_fonction
+
+
+
+    Fonction supprimer_proposition(regle:elem_BC, valeur:caractere)->elem_BC
+    Debut_fonction
+        si vide(regle) ou vide(valeur) ou premisse(regle) alors
+            supprimer_proposition<-regle
+        fin si
+
+        courante:proposition<-premisse(regle)
+        precedente:proposition<-null
+
+        tant que nonvide(courante) et courante different de conclusion(regle) faire
+            si (???()) alors //if (strcmp(courante->value, valeur) == 0) {
+                si vide(precedente) alors
+                    premisse(regle)<-next(courante)
+                sinon
+                    next(precedente)<-next(courante)
+                    si nonvide(next(courante)) alors
+                        prev(next(courante))<-precedente
+                    fin si
+                fin si
+            fin si
+            precedente<-courante
+            courante<-next(courante)
+        fin tant que
+
+        supprimer_proposition<-regle
+    Fin_fonction
+
+
+
+    Fonction premisse_est_vide(regle:elem_BC)->booleen
+    Debut_fonction
+        si regle = null alors
+            premisse_est_vide<-1
+        fin si
+
+        premisse_est_vide<-(???) //return (regle->premisse == regle->conclusion);
+    Fin_fonction
+
+
+
+    Fonction premiere_proposition(regle:elem_BC)->proposition
+    Debut_fonction
+        si vide(regle) ou vide(premisse(regle)) alors
+            premiere_proposition<-null
+        fin si
+
+        premiere_proposition<-premisse(regle)
+    Fin_fonction
+
+
+
+    Fonction acceder_conclusion(regle:elem_BC)->proposition
+    Debut_fonction
+        si vide(regle) ou vide(conclusion(regle)) alors
+            acceder_conclusion<-null
+        fin si
+
+        acceder_conclusion<-conclusion(regle)
+    Fin_fonction
+
+
+
+    Fonction creer_base_vide()->liste_BC
+    Debut_fonction
+        base:liste_BC<-creer()
+        si nonvide(base) alors
+            BC(base)<-null
+            nb_elem(nouvelle_base)<-null
+        fin si
+        creer_base_vide<-base
+    Fin_fonction
+
+
+
+    Fonction ajouter_regle(base:liste_BC, nouvelle_regle:elem_BC)->liste_BC
+    Debut_fonction
+        si vide(base) alors
+            ajouter_regle<-null
+        fin si
+
+        si vide(nouvelle_regle) alors
+            ajouter_regle<-base
+        fin si
+
+        si vide(BC(base)) alors
+            BC(base)<-nouvelle_regle
+        sinon
+            tmp:elem_BC<-BC(base)
+            tant que nonvide(prochain(tmp)) faire
+                tmp<-prochain(tmp)
+            fin tant que
+            prochain(tmp)<-nouvelle_regle
+        fin si
+
+        nb_elem(base)<-nb_elem(base)+1
+        ajouter_regle<-base
+    Fin_fonction
+
+
+
+    Fonction acceder_regle_tete(base:liste_BC)->elem_BC
+    Debut_fonction
+        si vide(base) ou vide(BC(base)) alors
+            acceder_regle_tete<-null
+        fin si
+
+        acceder_regle_tete<-BC(base)
+    Fin_fonction
+
+
+
+     Fonction supprimer_regle_vide(base:liste_BC)->liste_BC
+        Debut_fonction
+            si vide(base) ou vide(BC(base)) alors
+                supprimer_regle_vide<-base
+            fin si
+
+            regle_actuelle:elem_BC<-BC(base)
+            regle_precedente:elem_BC<-null
+
+            tant que nonvide(regle_actuelle) faire
+                si premisse_est_vide(regle_actuelle) alors
+                    si vide(regle_precedente) alors
+                        BC(base)<-prochain(regle_actuelle)
+                    sinon
+                        prochain(regle_precedente)<-prochain(regle_actuelle)
+                    fin si
+
+                    regle_a_supprimer:elem_BC<-regle_actuelle
+                    regle_actuelle<-prochain(regle_actuelle)
+
+                    nb_elem(base)<-nb_elem(base)-1
+                sinon
+                    regle_precedente<-regle_actuelle
+                    regle_actuelle<-prochain(regle_actuelle)
+                fin si
+            fin tant que
+
+            supprimer_regle_vide<-base
+        Fin_fonction
+
+
+
+    Fonction creer_base_vide_BF()->liste_BF
+    Debut_fonction
+        base:liste_BF<-creer()
+        si nonvide(base) alors
+            BF(base)<-null
+            nb_elem(base)<-null
+        fin si
+        creer_base_vide_BF<-base
+    Fin_fonction
+
+
+
+    Fonction ajouter_proposition_BF(base:liste_BF, valeur:caractere)->void
+    Debut_fonction
+
+        nouvelle_prop:proposition<-creer()
+        value(nouvelle_prop)<-???(valeur) //nouvelle_prop->value = strdup(valeur);
+        next(nouvelle_prop)<-null
+
+        si nonvide(base)
+            si vide(BF(base))
+                BF(base)<-nouvelle_prop
+                prev(nouvelle_prop)<-null
+            sinon
+                tmp:proposition<-BF(base)
+                tant que nonvide(next(tmp)) faire
+                    tmp<-next(tmp)
+                fin tant que
+                prev(nouvelle_prop)<-tmp
+                next(tmp)<-nouvelle_prop
+            fin si
+        fin si
+
+        nb_elem(base)<-nb_elem(base)+1
+    Fin_fonction
+
+
+
+    Fonction charger_base_de_connaissances(nom_fichier:chaine)->booleen
+    Debut_fonction
+        ??? //FILE *fichier = fopen(nom_fichier, "r");
+        afficher "Chargement du fichier ???" //printf("Chargement du fichier %s...\n", nom_fichier);
+        ligne:??? //char ligne[1024];
+        token:caractere
+
+        si vide(fichier) alors
+            afficher "Erreur lors de l'ouverture du fichier"
+            charger_base_de_connaissances<-0
+        fin si
+
+        tant que ??? faire //while (fgets(ligne, sizeof(ligne), fichier)) {
+            ??? //ligne[strcspn(ligne, "\n")] = 0;
+
+            si ??? alors //if (strstr(ligne, "=>")) { // C'est une règle
+                nouvelle_regle:elem_BC<-creer_regle_vide();
+
+                token<-??? //token = strtok(ligne, " ,");
+                tant que nonvide(token) et vide(???) faire //while (token != NULL && strstr(token, "=>") == NULL) {
+                    nouvelle_regle<-ajouter_proposition(nouvelle_regle, token);
+                    token<-??? //token = strtok(NULL, " ,");
+                fin tant que
+
+                si nonvide(token) et nonvide(???) alors
+                    token<-??? //token = strtok(NULL, " ,");
+                    si nonvide(token) alors
+                        nouvelle_regle<-creer_conclusion(nouvelle_regle, token);
+                    fin si
+                fin si
+
+                base_de_connaissances<-ajouter_regle(base_de_connaissances, nouvelle_regle);
+            sinon
+                ajouter_proposition_BF(base_faits, ligne)
+            fin si
+        fin tant que
+
+        ??? //fclose(fichier);
+        afficher "Chargement termine."
+        charger_base_de_connaissances<-1
+    Fin_fonction
+
+
+
+    Fonction afficherBCBF(base_faits:liste_BF, base_connaissances:liste_BC)->void
+    Debut_fonction
+        afficher "on a nb_elem(base_faits) faits et nb_elem(base_connaissances)) regles" //printf("\n\non a %d faits et %d regles:\n", base_faits->nb_elem, base_connaissances->nb_elem);
+        liste_fait:proposition<-BF(base_faits)
+        tant que nonvide(liste_fait) faire
+            afficher "value(liste_fait)" //printf("%s\n", liste_fait->value);
+            liste_fait<-next(liste_fait)
+        fin tant que
+
+        afficher "Liste des regles:" //printf("Liste des regles:\n");
+        liste_regle:elem_BC<-BC(base_connaissances)
+        tant que nonvide(liste_regle)
+            courante:proposition<-premisse(liste_regle)
+
+            tant que nonvide(courante) et courante différent de conclusion(liste_regle) faire
+                afficher "value(courante)" //printf("%s ", courante->value);
+                courante<-next(courante)
+            fin tant que
+
+            si nonvide(conclusion(liste_regle)) alors
+                afficher "=>"
+                afficher "value(conclusion(liste_regle))" //printf("=> %s\n", liste_regle->conclusion->value);
+            sinon
+                afficher "=> NULL" //printf("=> NULL");
+            fin si
+
+            liste_regle<-prochain(liste_regle)
+        fin tant que
+    Fin_fonction
+
+
+
+VARIABLES
+    fichier_charge_avec_succes:booleen<-0
+
+DEBUT_ALGORITHME
+
+    base_connaissances:liste_BC<-creer_base_vide()
+    base_faits:liste_BF<-creer_base_vide_BF()
+    fichier_charge_avec_succes<-charger_base_de_connaissances("base_de_connaissances.txt")
+
+    si fichier_charge_avec_succes=1 alors
+        fait:proposition<-BF(base_faits)
+        regle:elem_BC
+
+        tant que nonvide(fait) faire
+            afficher "On regarde pour le fait"
+            afficher "value(fait)" //printf("On regarde pour le fait %s\n", fait->value);
+            regle<-acceder_regle_tete(base_connaissances)
+
+            tant que nonvide(regle)
+                si appartient_premisse(regle, value(fait))=1 alors
+                    regle<-supprimer_proposition(regle, value(fait))
+                    si premisse_est_vide(regle)=1 alors
+                        si nonvide(acceder_conclusion(regle)) alors
+                            ajouter_proposition_BF(base_faits, value(acceder_conclusion(regle)))
+                            base_connaissances<-supprimer_regle_vide(base_connaissances)
+                        fin si
+                    fin si
+                fin si
+
+                regle<-prochain(regle)
+            fin tant que
+
+            fait<-next(fait)
+            regle<-acceder_regle_tete(base_connaissances)
+        fin tant que
+    fin si
+
+    afficherBCBF(base_faits, base_connaissances)
+
+FIN_ALGORITHME
