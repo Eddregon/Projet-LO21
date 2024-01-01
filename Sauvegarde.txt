@@ -1,4 +1,9 @@
-A, B, => C
-C, A, => D
+A, B => C
+C, A => D
+D, B => E
+E, B => W
+V, C => T
+C, A => G
+T, P => n
 A
 B

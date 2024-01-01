@@ -22,30 +22,23 @@ typedef struct regle{
     struct regle * prochain;
 } elem_BC;
 
-
-
 // Fonctions sur les regles
-
 elem_BC* creer_regle_vide();
 
 elem_BC* ajouter_proposition(elem_BC *regle, char *valeur);
 
 elem_BC* creer_conclusion(elem_BC *regle, char *valeur);
 
+int premisse_est_vide(elem_BC *regle);
 int appartient_premisse(elem_BC *regle, char *valeur);
     //Fonction appelée par appartient_premisse
     int appartient_premisse_recursif(proposition *courante, proposition *conclusion, char *valeur);
 
 elem_BC* supprimer_proposition(elem_BC *regle, char *valeur);
 
-int premisse_est_vide(elem_BC *regle);
-
 proposition* premiere_proposition(elem_BC *regle);
 
 proposition* acceder_conclusion(elem_BC *regle);
-
-
-
 
 
 // Création d'une structure, qui sera utilisé pour créer une variable
@@ -67,26 +60,26 @@ typedef struct {
 
 
 
-// Fonctions sur la base de connaissance et la base de faits
+// Fonctions sur la base de connaissance 
 liste_BC* creer_base_vide();
-
 
 liste_BC* ajouter_regle(liste_BC *base, elem_BC *nouvelle_regle);
 
 elem_BC* acceder_regle_tete(liste_BC *base);
 
+liste_BC * supprimer_regle_vide(liste_BC *base);
 
 
-// Fonctions complémentaires
-
+// Fonctions Base de faits
 liste_BF* creer_base_vide_BF();
 
 void ajouter_proposition_BF(liste_BF *base, char *valeur);
 
-liste_BC * supprimer_regle_vide(liste_BC *base);
 
+// Fonction fichier
 int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *base_connaissances, liste_BF *base_faits);
 
+void afficherBCBF(liste_BF* base_faits, liste_BC* base_connaissances);
 
 
 #endif
