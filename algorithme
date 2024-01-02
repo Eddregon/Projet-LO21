@@ -1,3 +1,23 @@
+LEXIQUE/DOCUMENTATION
+
+    structure proposition             // structure d'une proposition utilisée dans la base de faits et la base de connaissances, contient la valeur de la proposition, un pointeur vers la proposition suivante et un pointeur vers la proposition precedente
+        value:sequence de caracteres  // valeur de la proposition (dans notre cas une suite de lettres)
+        next:proposition              // pointeur vers la proposition suivante
+        prev:proposition              // pointeur vers la proposition precedente
+
+    structure elem_BC                 // structure d'une regle de la base de connaissances, contient un pointeur vers la premiere proposition de la regle, un pointeur vers la conclusion de la regle et un pointeur vers la regle suivante
+        premisse:proposition          // pointeur vers la premiere proposition de la regle
+        conclusion:proposition        // pointeur vers la conclusion de la regle (derniere proposition de la regle)
+        prochain:elem_BC              // pointeur vers la regle suivante
+
+    structure liste_BC                // structure de la base de connaissances, contient un pointeur vers la premiere regle de la base de connaissances et le nombre de regles dans la base de connaissances
+        BC:elem_BC                    // pointeur vers la premiere regle de la base de connaissances
+        nb_elem:entier                // nombre de regles dans la base de connaissances
+
+    structure liste_BF                // structure de la base de faits, contient un pointeur vers la premiere proposition de la base de faits et le nombre de propositions dans la base de faits
+        BF:proposition                // pointeur vers la premiere proposition de la base de faits
+        nb_elem:entier                // nombre de propositions dans la base de faits
+
 FONCTIONS_UTILISEES
     Fonction creer_regle_vide()->elem_BC
     Debut_fonction
