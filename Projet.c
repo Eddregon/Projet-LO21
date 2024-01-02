@@ -143,7 +143,11 @@ int premisse_est_vide(elem_BC *regle) {
 
     // Vérifie si la prémisse pointe directement sur la conclusion.
     // Si c'est le cas, cela signifie que la prémisse est vide.
-    return (regle->premisse == regle->conclusion);
+    if (regle->premisse == regle->conclusion){
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 proposition* premiere_proposition(elem_BC *regle) {

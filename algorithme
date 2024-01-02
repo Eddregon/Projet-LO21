@@ -67,13 +67,13 @@ FONCTIONS_UTILISEES
 
 
 
-    Fonction appartient_premisse_recursif(courante:proposition, conclusion:proposition, caleur:caractere)->booleen
+    Fonction appartient_premisse_recursif(courante:proposition, conclusion:proposition, valeur:caractere)->booleen
     Debut_fonction
         si nonvide(courante) ou courante = conclusion alors
             appartient_premisse_recursif<-0
         fin si
 
-        si (???) alors //if (strcmp(courante->value, valeur) == 0) {
+        si value(courante) = valeur alors
             appartient_premisse_recursif<-1
         fin si
 
@@ -103,7 +103,7 @@ FONCTIONS_UTILISEES
         precedente:proposition<-null
 
         tant que nonvide(courante) et courante different de conclusion(regle) faire
-            si (???()) alors //if (strcmp(courante->value, valeur) == 0) {
+            si value(courante) = valeur alors
                 si vide(precedente) alors
                     premisse(regle)<-next(courante)
                 sinon
@@ -124,11 +124,15 @@ FONCTIONS_UTILISEES
 
     Fonction premisse_est_vide(regle:elem_BC)->booleen
     Debut_fonction
-        si regle = null alors
+        si vide(regle) alors
             premisse_est_vide<-1
         fin si
 
-        premisse_est_vide<-(???) //return (regle->premisse == regle->conclusion);
+        si premisse(regle) = conclusion(regle) alors
+            premisse_est_vide<-1
+        sinon
+            premisse_est_vide<-0
+        fin si
     Fin_fonction
 
 
@@ -276,9 +280,10 @@ FONCTIONS_UTILISEES
 
     Fonction charger_base_de_connaissances(nom_fichier:chaine)->booleen
     Debut_fonction
-        ??? //FILE *fichier = fopen(nom_fichier, "r");
-        afficher "Chargement du fichier ???" //printf("Chargement du fichier %s...\n", nom_fichier);
-        ligne:??? //char ligne[1024];
+        fichier:FILE<- ouverture du fichier nom_fichier en mode lecture seule
+        afficher "Chargement du fichier"
+        afficher nom_fichier
+        ligne:séquence de caracteres
         token:caractere
 
         si vide(fichier) alors
@@ -289,7 +294,7 @@ FONCTIONS_UTILISEES
         tant que ??? faire //while (fgets(ligne, sizeof(ligne), fichier)) {
             ??? //ligne[strcspn(ligne, "\n")] = 0;
 
-            si ??? alors //if (strstr(ligne, "=>")) { // C'est une règle
+            si "=>" présent dans ligne alors
                 nouvelle_regle:elem_BC<-creer_regle_vide();
 
                 token<-??? //token = strtok(ligne, " ,");
