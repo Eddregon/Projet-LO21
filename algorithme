@@ -1,6 +1,6 @@
 LEXIQUE/DOCUMENTATION
 
-    structure proposition             // structure d'une proposition utilisée dans la base de faits et la base de connaissances, contient la valeur de la proposition, un pointeur vers la proposition suivante et un pointeur vers la proposition precedente
+    structure proposition             // structure d'une proposition utilisée dans la base de faits et les regles de la base de connaissances, contient la valeur de la proposition, un pointeur vers la proposition suivante et un pointeur vers la proposition precedente
         value:sequence de caracteres  // valeur de la proposition (dans notre cas une suite de lettres)
         next:proposition              // pointeur vers la proposition suivante
         prev:proposition              // pointeur vers la proposition precedente
@@ -19,6 +19,8 @@ LEXIQUE/DOCUMENTATION
         nb_elem:entier                // nombre de propositions dans la base de faits
 
 FONCTIONS_UTILISEES
+
+    // Fonction qui cree une regle vide
     Fonction creer_regle_vide()->elem_BC
     Debut_fonction
         nouvelle_regle<-creer()
@@ -32,7 +34,8 @@ FONCTIONS_UTILISEES
 
 
 
-    Fonction ajouter_proposition(regle:elem_BC, valeur:caractere)->elem_BC
+    // Fonction qui ajoute une proposition à une regle
+    Fonction ajouter_proposition(regle:elem_BC, valeur:sequence de caracteres)->elem_BC
     Debut_fonction
         nouvelle_prop<-creer()
         value(nouvelle_prop)<-valeur
@@ -60,7 +63,8 @@ FONCTIONS_UTILISEES
 
 
 
-    Fonction creer_conclusion(regle:elem_BC, valeur:caractere)->elem_BC
+    // Fonction qui cree la conclusion d'une regle
+    Fonction creer_conclusion(regle:elem_BC, valeur:sequence de caracteres)->elem_BC
     Debut_fonction
         si nonvide(conclusion(regle)) alors
             value(conclusion(regle))<-valeur
@@ -86,10 +90,10 @@ FONCTIONS_UTILISEES
     Fin_fonction
 
 
-
-    Fonction appartient_premisse_recursif(courante:proposition, conclusion:proposition, valeur:caractere)->booleen
+    // Les 2 prochaines fonctions permettent de verifier si une proposition appartient à la premisse d'une regle de maniere recursive
+    Fonction appartient_premisse_recursif(courante:proposition, conclusion:proposition, valeur:sequence de caracteres)->booleen
     Debut_fonction
-        si nonvide(courante) ou courante = conclusion alors
+        si vide(courante) ou courante = conclusion alors
             appartient_premisse_recursif<-0
         fin si
 
@@ -100,9 +104,7 @@ FONCTIONS_UTILISEES
         appartient_premisse_recursif<-appartient_premisse_recursif(next(courante), conclusion, valeur)
     Fin_fonction
 
-
-
-    Fonction appartient_premisse(regle:elem_BC, valeur:caractere)->booleen
+    Fonction appartient_premisse(regle:elem_BC, valeur:sequence de caracteres)->booleen
     Debut_fonction
         si vide(regle) ou vide(valeur)
             appartient_premisse<-0
@@ -113,9 +115,10 @@ FONCTIONS_UTILISEES
 
 
 
-    Fonction supprimer_proposition(regle:elem_BC, valeur:caractere)->elem_BC
+    // Fonction qui supprime une proposition d'une regle
+    Fonction supprimer_proposition(regle:elem_BC, valeur:sequence de caracteres)->elem_BC
     Debut_fonction
-        si vide(regle) ou vide(valeur) ou premisse(regle) alors
+        si vide(regle) ou vide(valeur) ou vide(premisse(regle)) alors
             supprimer_proposition<-regle
         fin si
 
@@ -142,6 +145,7 @@ FONCTIONS_UTILISEES
 
 
 
+    // Fonction qui verifie si la premisse d'une regle est vide
     Fonction premisse_est_vide(regle:elem_BC)->booleen
     Debut_fonction
         si vide(regle) alors
@@ -157,6 +161,7 @@ FONCTIONS_UTILISEES
 
 
 
+    // Fonction qui accede à la premiere proposition d'une regle
     Fonction premiere_proposition(regle:elem_BC)->proposition
     Debut_fonction
         si vide(regle) ou vide(premisse(regle)) alors
@@ -168,6 +173,7 @@ FONCTIONS_UTILISEES
 
 
 
+    // Fonction qui accede à la conclusion d'une regle
     Fonction acceder_conclusion(regle:elem_BC)->proposition
     Debut_fonction
         si vide(regle) ou vide(conclusion(regle)) alors
@@ -179,18 +185,20 @@ FONCTIONS_UTILISEES
 
 
 
+    // Fonction qui cree une base de connaissances vide
     Fonction creer_base_vide()->liste_BC
     Debut_fonction
         base:liste_BC<-creer()
         si nonvide(base) alors
             BC(base)<-null
-            nb_elem(nouvelle_base)<-null
+            nb_elem(base)<-0
         fin si
         creer_base_vide<-base
     Fin_fonction
 
 
 
+    // Fonction qui ajoute une regle à la base de connaissances
     Fonction ajouter_regle(base:liste_BC, nouvelle_regle:elem_BC)->liste_BC
     Debut_fonction
         si vide(base) alors
@@ -217,6 +225,7 @@ FONCTIONS_UTILISEES
 
 
 
+    // Fonction qui accede à la premiere regle de la base de connaissances
     Fonction acceder_regle_tete(base:liste_BC)->elem_BC
     Debut_fonction
         si vide(base) ou vide(BC(base)) alors
@@ -228,6 +237,7 @@ FONCTIONS_UTILISEES
 
 
 
+    // Fonction qui supprime les regles dont la premisse est vide
      Fonction supprimer_regle_vide(base:liste_BC)->liste_BC
         Debut_fonction
             si vide(base) ou vide(BC(base)) alors
@@ -238,7 +248,7 @@ FONCTIONS_UTILISEES
             regle_precedente:elem_BC<-null
 
             tant que nonvide(regle_actuelle) faire
-                si premisse_est_vide(regle_actuelle) alors
+                si premisse_est_vide(regle_actuelle)=1 alors
                     si vide(regle_precedente) alors
                         BC(base)<-prochain(regle_actuelle)
                     sinon
@@ -260,19 +270,20 @@ FONCTIONS_UTILISEES
 
 
 
+    // Fonction qui cree une base de faits vide
     Fonction creer_base_vide_BF()->liste_BF
     Debut_fonction
         base:liste_BF<-creer()
         si nonvide(base) alors
             BF(base)<-null
-            nb_elem(base)<-null
+            nb_elem(base)<-0
         fin si
         creer_base_vide_BF<-base
     Fin_fonction
 
 
-
-    Fonction ajouter_proposition_BF(base:liste_BF, valeur:caractere)->void
+    // Fonction qui ajoute une proposition à la base de faits
+    Fonction ajouter_proposition_BF(base:liste_BF, valeur:sequence de caracteres)->void
     Debut_fonction
 
         nouvelle_prop:proposition<-creer()
@@ -291,13 +302,14 @@ FONCTIONS_UTILISEES
                 prev(nouvelle_prop)<-tmp
                 next(tmp)<-nouvelle_prop
             fin si
-        fin si
 
-        nb_elem(base)<-nb_elem(base)+1
+            nb_elem(base)<-nb_elem(base)+1
+        fin si
     Fin_fonction
 
 
 
+    // Fonction qui charge la base de connaissances et la base de faits depuis un fichier texte
     Fonction charger_base_de_connaissances(nom_fichier:chaine)->booleen
     Debut_fonction
         fichier:FILE<- ouverture du fichier nom_fichier en mode lecture seule
@@ -342,31 +354,30 @@ FONCTIONS_UTILISEES
     Fin_fonction
 
 
-
+    // fonction qui affiche chaque valeur de la base de faits et chaque regle de la base de connaissances
     Fonction afficherBCBF(base_faits:liste_BF, base_connaissances:liste_BC)->void
     Debut_fonction
-        afficher "on a nb_elem(base_faits) faits et nb_elem(base_connaissances)) regles" //printf("\n\non a %d faits et %d regles:\n", base_faits->nb_elem, base_connaissances->nb_elem);
+        afficher "on a" nb_elem(base_faits) "faits et" nb_elem(base_connaissances) "regles"
         liste_fait:proposition<-BF(base_faits)
         tant que nonvide(liste_fait) faire
-            afficher "value(liste_fait)" //printf("%s\n", liste_fait->value);
+            afficher value(liste_fait)
             liste_fait<-next(liste_fait)
         fin tant que
 
-        afficher "Liste des regles:" //printf("Liste des regles:\n");
+        afficher "Liste des regles:"
         liste_regle:elem_BC<-BC(base_connaissances)
         tant que nonvide(liste_regle)
             courante:proposition<-premisse(liste_regle)
 
             tant que nonvide(courante) et courante différent de conclusion(liste_regle) faire
-                afficher "value(courante)" //printf("%s ", courante->value);
+                afficher value(courante)
                 courante<-next(courante)
             fin tant que
 
             si nonvide(conclusion(liste_regle)) alors
-                afficher "=>"
-                afficher "value(conclusion(liste_regle))" //printf("=> %s\n", liste_regle->conclusion->value);
+                afficher "=>" value(conclusion(liste_regle))
             sinon
-                afficher "=> NULL" //printf("=> NULL");
+                afficher "=> NULL"
             fin si
 
             liste_regle<-prochain(liste_regle)
@@ -389,8 +400,7 @@ DEBUT_ALGORITHME
         regle:elem_BC
 
         tant que nonvide(fait) faire
-            afficher "On regarde pour le fait"
-            afficher "value(fait)" //printf("On regarde pour le fait %s\n", fait->value);
+            afficher "On regarde pour le fait" value(fait)
             regle<-acceder_regle_tete(base_connaissances)
 
             tant que nonvide(regle)
