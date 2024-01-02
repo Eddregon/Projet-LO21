@@ -269,7 +269,7 @@ void ajouter_proposition_BF(liste_BF *base, char *valeur) {
 
     proposition *nouvelle_prop = (proposition*)malloc(sizeof(proposition));
     nouvelle_prop->value = strdup(valeur);
-    nouvelle_prop->next = NULL; // Pointe directement vers la conclusion existante
+    nouvelle_prop->next = NULL;
 
     if (base != NULL){
         if (base->BF == NULL) {
