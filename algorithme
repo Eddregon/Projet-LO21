@@ -35,7 +35,7 @@ FONCTIONS_UTILISEES
     Fonction ajouter_proposition(regle:elem_BC, valeur:caractere)->elem_BC
     Debut_fonction
         nouvelle_prop<-creer()
-        value(nouvelle_prop)<-???(valeur) //nouvelle_prop->value = strdup(valeur);
+        value(nouvelle_prop)<-valeur
         next(nouvelle_prop)<-conclusion(regle)
 
         si vide(premisse(regle)) alors
@@ -63,10 +63,10 @@ FONCTIONS_UTILISEES
     Fonction creer_conclusion(regle:elem_BC, valeur:caractere)->elem_BC
     Debut_fonction
         si nonvide(conclusion(regle)) alors
-            value(conclusion(regle))<-???(valeur) // regle->conclusion->value = strdup(valeur);
+            value(conclusion(regle))<-valeur
         sinon
             concl:proposition<-creer()
-            value(concl)<-???(valeur) //concl->value = strdup(valeur);
+            value(concl)<-valeur
             next(concl)<-null
             prev(concl)<-null
 
@@ -276,7 +276,7 @@ FONCTIONS_UTILISEES
     Debut_fonction
 
         nouvelle_prop:proposition<-creer()
-        value(nouvelle_prop)<-???(valeur) //nouvelle_prop->value = strdup(valeur);
+        value(nouvelle_prop)<-valeur
         next(nouvelle_prop)<-null
 
         si nonvide(base)
@@ -336,7 +336,7 @@ FONCTIONS_UTILISEES
             fin si
         fin tant que
 
-        ??? //fclose(fichier);
+        fermeture du fichier ouvert
         afficher "Chargement termine."
         charger_base_de_connaissances<-1
     Fin_fonction
