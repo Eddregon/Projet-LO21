@@ -267,6 +267,20 @@ liste_BF* creer_base_vide_BF() {
 
 void ajouter_proposition_BF(liste_BF *base, char *valeur) {
 
+    if (base == NULL || valeur == NULL) {
+        return; // Ne rien faire si la base est NULL ou si la valeur est NULL
+    }
+
+    // Vérifier si la proposition existe déjà dans la base de faits
+    proposition *courante = base->BF;
+    while (courante != NULL) {
+        if (strcmp(courante->value, valeur) == 0) {
+            // La proposition existe déjà, donc on ne l'ajoute pas
+            return;
+        }
+        courante = courante->next;
+    }
+
     proposition *nouvelle_prop = (proposition*)malloc(sizeof(proposition));
     nouvelle_prop->value = strdup(valeur);
     nouvelle_prop->next = NULL;
