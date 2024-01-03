@@ -337,11 +337,11 @@ int charger_base_de_connaissances_et_faits(const char *nom_fichier, liste_BC *ba
                 token = strtok(NULL, " ,"); // Passez à la conclusion
                 if (token != NULL) {
                     nouvelle_regle = creer_conclusion(nouvelle_regle, token);
+                    // Ajouter la règle à la base de connaissances
+                    base_connaissances = ajouter_regle(base_connaissances, nouvelle_regle);
                 }
             }
 
-            // Ajouter la règle à la base de connaissances
-            base_connaissances = ajouter_regle(base_connaissances, nouvelle_regle);
         } else { // C'est un fait
             // Ajouter le fait à la base de faits
             ajouter_proposition_BF(base_faits, ligne);
