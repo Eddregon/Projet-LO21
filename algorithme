@@ -286,6 +286,18 @@ FONCTIONS_UTILISEES
     Fonction ajouter_proposition_BF(base:liste_BF, valeur:sequence de caracteres)->void
     Debut_fonction
 
+        si vide(base) ou vide(valeur) alors
+            ajouter_proposition_BF<-null
+        fin si
+
+        courante:proposition<-BF(base)
+        tant que nonvide(courante) faire
+            si value(courante) = valeur alors
+                ajouter_proposition_BF<-null
+            fin si
+            courante<-next(courante)
+        fin tant que
+
         nouvelle_prop:proposition<-creer()
         value(nouvelle_prop)<-valeur
         next(nouvelle_prop)<-null
@@ -339,10 +351,11 @@ FONCTIONS_UTILISEES
                     token<-??? //token = strtok(NULL, " ,");
                     si nonvide(token) alors
                         nouvelle_regle<-creer_conclusion(nouvelle_regle, token);
+                        base_de_connaissances<-ajouter_regle(base_de_connaissances, nouvelle_regle);
                     fin si
                 fin si
 
-                base_de_connaissances<-ajouter_regle(base_de_connaissances, nouvelle_regle);
+
             sinon
                 ajouter_proposition_BF(base_faits, ligne)
             fin si
