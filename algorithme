@@ -335,20 +335,20 @@ FONCTIONS_UTILISEES
             charger_base_de_connaissances<-0
         fin si
 
-        tant que ??? faire //while (fgets(ligne, sizeof(ligne), fichier)) {
-            ??? //ligne[strcspn(ligne, "\n")] = 0;
+        tant que nonvide(ligne du fichier) faire
+            Enlever le saut de ligne à la fin de ligne si présent
 
             si "=>" présent dans ligne alors
                 nouvelle_regle:elem_BC<-creer_regle_vide();
 
-                token<-??? //token = strtok(ligne, " ,");
-                tant que nonvide(token) et vide(???) faire //while (token != NULL && strstr(token, "=>") == NULL) {
+                token<-chaine de caracteres de ligne jusqu'a la prochaine virgule
+                tant que nonvide(token) et token different de "=>" faire
                     nouvelle_regle<-ajouter_proposition(nouvelle_regle, token);
-                    token<-??? //token = strtok(NULL, " ,");
+                    token<-chaine de caracteres de ligne jusqu'a la prochaine virgule
                 fin tant que
 
                 si nonvide(token) et nonvide(???) alors
-                    token<-??? //token = strtok(NULL, " ,");
+                    token<-chaine de caracteres de ligne jusqu'a la prochaine virgule
                     si nonvide(token) alors
                         nouvelle_regle<-creer_conclusion(nouvelle_regle, token);
                         base_de_connaissances<-ajouter_regle(base_de_connaissances, nouvelle_regle);
