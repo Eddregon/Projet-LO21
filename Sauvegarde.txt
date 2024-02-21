@@ -1,5 +1,4 @@
-A, B => 
-A, B => 
+A, B, X => C
 C, A => D
 D, B => E
 E, B => W
@@ -8,3 +7,5 @@ C, A => G
 T, P => n
 A
 B
+B
+X
